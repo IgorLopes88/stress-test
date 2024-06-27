@@ -7,7 +7,7 @@ Desafio **Sistema de Stress test** do curso **Pós Go Expert**.
 ### Execução da **aplicação**
 Para executar a aplicação execute o comando:
 ```
-docker run igorlopes88/stress-test —url=http://google.com —requests=100 —concurrency=10
+docker run igorlopes88/stress-test --url=http://google.com --requests=100 --concurrency=10
 ```
 
 O resultado deverá ser esse:
