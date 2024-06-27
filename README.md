@@ -28,5 +28,8 @@ Status  Total
 200     100
 ```
 
-
 Pronto!
+
+
+### Correções de Bugs
+1. Inclusão do mutex para corrigir erro `fatal error: concurrent map writes`;

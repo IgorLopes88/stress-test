@@ -34,6 +34,7 @@ func (t *StressTest) start() {
 }
 
 func (t *StressTest) testing() results.Results {
+	m := sync.Mutex{}
 	result := results.Results{
 		TotalRequests:   t.Requests,
 		SuccessRequests: 0,
@@ -47,10 +48,12 @@ func (t *StressTest) testing() results.Results {
 		go func() {
 			defer wg.Done()
 			code, err := httprequest.HttpRequest(t.Url)
+			m.Lock()
 			result.StatusCodes[code]++
 			if err == nil {
 				result.SuccessRequests++
 			}
+			m.Unlock()
 			<-concurrency
 		}()
 	}
