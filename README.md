@@ -34,3 +34,4 @@ Pronto!
 ### Correções de Bugs
 1. Inclusão do mutex para corrigir erro `fatal error: concurrent map writes`;
 2. Erro em downloads de alguns pacotes (não essenciais);
+3. Verificação de resposta vazia (erro no `defer resp.Body.Close()` quando isso acontecia);
