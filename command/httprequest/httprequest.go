@@ -12,9 +12,9 @@ func HttpRequest(url string) (int, error) {
 		return 0, err
 	}
 	resp, err := client.Do(req)
-	defer resp.Body.Close()
-	if err != nil {
+	if resp != nil {
+		defer resp.Body.Close()
 		return resp.StatusCode, err
 	}
-	return resp.StatusCode, nil
+	return 0, err
 }
