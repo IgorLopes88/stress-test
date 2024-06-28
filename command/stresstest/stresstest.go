@@ -5,9 +5,9 @@ import (
 	"net/url"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/fatih/color"
-	"github.com/igorlopes88/goexpert-stresstest/command/hourglass"
 	"github.com/igorlopes88/goexpert-stresstest/command/httprequest"
 	"github.com/igorlopes88/goexpert-stresstest/command/results"
 	"github.com/spf13/cobra"
@@ -20,10 +20,14 @@ type StressTest struct {
 	Requests    int
 	Concurrency int
 	Cmd         *cobra.Command
+	Begin       time.Time
+	Final       time.Time
+	Duration    time.Duration
 }
 
 func (t *StressTest) start() {
 	blue := color.New(color.FgHiBlue)
+	t.Begin = time.Now()
 	fmt.Println()
 	blue.Println("-- RUN STRESS TEST -->")
 	fmt.Printf("Url: %s\n", t.Url)
@@ -31,6 +35,7 @@ func (t *StressTest) start() {
 	fmt.Printf("Concurrency: %d\n", t.Concurrency)
 	fmt.Println("")
 	t.urlValidador(t.Cmd)
+	fmt.Println("Testing...")
 }
 
 func (t *StressTest) testing() results.Results {
@@ -58,16 +63,15 @@ func (t *StressTest) testing() results.Results {
 		}()
 	}
 	wg.Wait()
+	t.Final = time.Now()
+	t.Duration = t.Final.Sub(t.Begin)
 	return result
 }
 
 func (t *StressTest) Execute() {
 	t.start()
-	spin := hourglass.Hourglass{}
-	spin.Start()
 	result := t.testing()
-	spin.Stop()
-	result.GenerateReport(result, spin.Duration)
+	result.GenerateReport(result, t.Duration)
 }
 
 func (t *StressTest) urlValidador(cmd *cobra.Command) {
